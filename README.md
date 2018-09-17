@@ -4,13 +4,15 @@ Shoppinglist is an app helps users keep track of their purchased goods.Users can
 ## About
 A user can have several shoppinglists
 
-A user can delete any of the goods added
+A user can delete a shoppinglist
 
-A user can view the amount they spent on goods
+A user can update the name of a shoppinglist
 
-A user can view all shopped goods
+A user can add shoppinglist
 
-A user is required to include an e-mail address,user name, first name and Surname on creating an account
+A user can view all shoppinglist
+
+A user is required to include an password,user name, first name and Surname on creating an account
 
 
 ## Motivation
