@@ -42,7 +42,6 @@ app.use(function(err, req, res, next){
    });
 });
 
-// session handler
 
 
 var port  = process.env.PORT || 3000;

@@ -3,11 +3,6 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-// var productSchema = new Schema({
-//     product: String,
-//     quantity: Number,
-//     amount: Number, 
-// });
 
 var shoppinglistSchema = new Schema({
     name: String,

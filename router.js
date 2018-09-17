@@ -12,6 +12,7 @@ const Shoppinglists =   require('./models').Shoppinglist
    
 
     router
+      //Signup endpoint
       .post("/signup", (req, res) =>{
         Users.find({"username":req.body.username},(err, users) =>{
             if(users){
@@ -25,6 +26,7 @@ const Shoppinglists =   require('./models').Shoppinglist
         })  
         
     })
+      //login endpoint
       .post("/login", function(req, res){
         Users.find({"username":req.body.username}, (err, users) =>{
             if(users.length === 0){
@@ -39,6 +41,7 @@ const Shoppinglists =   require('./models').Shoppinglist
             
         })
     })
+      // all lists endpoints
       .get("/auth/lists/", function(req, res){
         var token = req.headers['x-access-token'];
         if(!token) return res.status(401).send({auth: false, mesaage: 'No token provided.'})
@@ -57,6 +60,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                
         })
     })
+     //Add shoppinglist endpoint
       .post("/auth/addlist/", (req, res) =>{
         var token = req.headers['x-access-token'];
         if(!token) return res.status(401).send({auth: false, mesaage: 'No token provided.'})
@@ -73,6 +77,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                
         })
     })
+       //Update shoppinglist endpoint
         .put("/auth/update/", (req, res) =>{
         var token = req.headers['x-access-token'];
         if(!token) return res.status(401).send({auth: false, mesaage: 'No token provided.'})
@@ -89,5 +94,21 @@ const Shoppinglists =   require('./models').Shoppinglist
           });
 
         })
-    });
+    })
+       //Delete shoppinglist endpoint
+        .delete("/auth/delete", (req, res) => {
+            var token = req.headers['x-access-token'];
+            if(!token) return res.status(401).send({auth: false, mesaage: 'No token provided.'})
+            jwt.verify(token, 'super', function(err, decoded) {
+                if (err) return res.status(500).send({
+                    auth: false,
+                    message: 'Failed to authenticate token.'
+                });
+                Users.find({"_id":decoded.id}, (err, user) =>{
+                    Shoppinglists.find({'name':req.body.name, 'owner':user[0]._id}).remove().exec();
+                    res.status(201).send(` list deleted `)
+              });
+            })
+
+        });
 module.exports = router;
