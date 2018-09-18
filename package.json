@@ -4,22 +4,30 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "start": "SET NODE_ENV=dev && node app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "config": "^1.20.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.3.0",
+    "mocha": "^5.2.0",
     "mongoose": "^4.4.20",
     "mongoose-type-email": "^1.0.9",
     "morgan": "^1.7.0",
     "save": "^2.3.2",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "supertest": "^3.3.0"
   }
 }

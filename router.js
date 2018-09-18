@@ -15,12 +15,14 @@ const Shoppinglists =   require('./models').Shoppinglist
       //Signup endpoint
       .post("/signup", (req, res) =>{
         Users.find({"username":req.body.username},(err, users) =>{
-            if(users){
-                res.send(`${req.body.username} user already exists`)
+            if(users.length > 0){
+                return res.json({message: `User already exists, ${req.body.username }`});
+                
             } else{
                 var user =  new Users(req.body);
                 user.save();
-                res.status(201).send(`${req.body.username} user created `)
+                return res.json({message: `User successfully added!, ${req.body.username }`});
+                
             }
 
         })  
@@ -30,13 +32,13 @@ const Shoppinglists =   require('./models').Shoppinglist
       .post("/login", function(req, res){
         Users.find({"username":req.body.username}, (err, users) =>{
             if(users.length === 0){
-                res.send(`${req.body.username} user doesnt existed`)
+                return res.json({message:`${req.body.username} user doesnt existed`})
             }else{
                 var token = jwt.sign({id:users[0]._id},'super', {
                     expiresIn: 86400
                 });
                 console.log(token)
-                res.json({'user': req.body.username, 'token':token})
+                return res.json({'user': req.body.username, 'token':token})
             }
             
         })
@@ -46,14 +48,14 @@ const Shoppinglists =   require('./models').Shoppinglist
         var token = req.headers['x-access-token'];
         if(!token) return res.status(401).send({auth: false, mesaage: 'No token provided.'})
         jwt.verify(token, 'super', function(err, decoded) {
-           if (err) return res.status(500).send({
+           if (err) return res.status(500).json({
                auth: false,
                message: 'Failed to authenticate token.'
            });
            Users.find({"_id":decoded.id}, (err, user) =>{
                 Shoppinglists.find({'owner':user[0]._id}, (err, list) =>{
                     console.log(list.length)
-                    res.status(201).send(list)
+                    return res.status(201).send(list)
                 })
 
             });
@@ -72,7 +74,7 @@ const Shoppinglists =   require('./models').Shoppinglist
            Users.find({"_id":decoded.id}, (err, user) =>{
                   var list =  new Shoppinglists({'name':req.body.name, 'owner':user[0]._id});
                   list.save();
-                  res.status(201).send(` user created `)
+                  return res.status(201).send(` user created `)
             });
                
         })
@@ -90,7 +92,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                 Shoppinglists.where({'name':req.body.name, 'owner':user[0]._id}).update({
                     $set: {name:req.body.newName}
                 }).exec();
-                res.status(201).send(` list updated `)
+                return res.status(201).send(` list updated `)
           });
 
         })
@@ -106,7 +108,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                 });
                 Users.find({"_id":decoded.id}, (err, user) =>{
                     Shoppinglists.find({'name':req.body.name, 'owner':user[0]._id}).remove().exec();
-                    res.status(201).send(` list deleted `)
+                    return res.status(201).send(` list deleted `)
               });
             })
 
