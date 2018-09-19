@@ -1,4 +1,4 @@
-https://travis-ci.org/dkam26/express-api-shoppinglist.svg?branch=develop
+[![Build Status](https://travis-ci.org/dkam26/express-api-shoppinglist.svg?branch=develop)](https://travis-ci.org/dkam26/express-api-shoppinglist)
 
 [![Coverage Status](https://coveralls.io/repos/github/dkam26/express-api-shoppinglist/badge.svg?branch=develop)](https://coveralls.io/github/dkam26/express-api-shoppinglist?branch=develop)
 
