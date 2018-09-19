@@ -7,23 +7,26 @@ const  expect = chai.expect;
 const app = require('../app').app;
 const Users =  require('../models').User
 const Shoppinglists =   require('../models').Shoppinglist
-
+const user ={
+    username: 'ii',
+    firstname: 'deo',
+    secondname: 'Kamara',
+    password:'1234'
+  }
 chai.use(chaiHttp);
 
 describe('Shoppinglistapp', () => {
     before((done) =>{
         Users.remove({}, (err) => { 
-                done();		   	   
+          Shoppinglists.remove({}, (err) =>{
+             done();	
+          })       	   	   
          });
+   
     })
-    describe('/POST signup', () => {
+    describe('/POST signup and /POST login', () => {
         it('it should POST  signup', (done) => {
-          var user ={
-            username: 'ii',
-            firstname: 'deo',
-            secondname: 'Kamara',
-            password:'1234'
-          }
+         
           chai.request(app)
               .post('/shoppinglists/signup')
               .send(user)
@@ -33,8 +36,49 @@ describe('Shoppinglistapp', () => {
                     expect(res.body).to.have.own.property('message', 'User successfully added!, ii' )
                 done();
               });
-        });
-    });
 
-    
+        });
+      
+    });
+    describe('/POST login', () => {
+        var token ='';
+        it('it should POST  login', (done) => {
+          chai.request(app)
+              .post('/shoppinglists/login')
+              .send({"username":user.username,"password":user.password})
+              .end((err, res) =>{
+                expect(res.status).to.equal(200);
+                token = res.body.token
+                
+                done();
+              })
+              
+
+        });
+        it('it should POST list', (done) =>{
+            var list = 'shirt';
+            chai.request(app)
+                .post('/shoppinglists/auth/addlist/')
+                .set('x-access-token',token)
+                .send({'name':list})
+                .end((err, res ) => {
+                    expect(res.status).to.equal(201);
+                    expect(res.body).to.be.an('object');
+                    done();
+                })
+               
+          })
+          it('it should GET lists', (done) =>{
+            chai.request(app)
+                .get('/shoppinglists/auth/lists/')
+                .set('x-access-token',token)
+                .end((err, res ) => {
+                    expect(res.status).to.equal(201);
+                    expect(res.body).to.be.an('array');
+                    done();
+                })
+               
+          })
+    });
+ 
   });

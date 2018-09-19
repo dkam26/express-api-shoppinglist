@@ -30,14 +30,13 @@ const Shoppinglists =   require('./models').Shoppinglist
     })
       //login endpoint
       .post("/login", function(req, res){
-        Users.find({"username":req.body.username}, (err, users) =>{
+        Users.find({"username":req.body.username,"password":req.body.password}, (err, users) =>{
             if(users.length === 0){
                 return res.json({message:`${req.body.username} user doesnt existed`})
             }else{
                 var token = jwt.sign({id:users[0]._id},'super', {
                     expiresIn: 86400
                 });
-                console.log(token)
                 return res.json({'user': req.body.username, 'token':token})
             }
             
@@ -46,6 +45,7 @@ const Shoppinglists =   require('./models').Shoppinglist
       // all lists endpoints
       .get("/auth/lists/", function(req, res){
         var token = req.headers['x-access-token'];
+        
         if(!token) return res.status(401).send({auth: false, mesaage: 'No token provided.'})
         jwt.verify(token, 'super', function(err, decoded) {
            if (err) return res.status(500).json({
@@ -74,7 +74,7 @@ const Shoppinglists =   require('./models').Shoppinglist
            Users.find({"_id":decoded.id}, (err, user) =>{
                   var list =  new Shoppinglists({'name':req.body.name, 'owner':user[0]._id});
                   list.save();
-                  return res.status(201).send(` user created `)
+                  return res.status(201).send({message: `User successfully added!, ${req.body.username }`} )
             });
                
         })
