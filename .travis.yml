@@ -12,10 +12,9 @@ cache:
 install:
   - npm install
 # command to run tests
-
-before_script:
-  - mongo test_db
+  
 script:
+  - mongo test_db
   - mocha --exit
 after_script: 
 # "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
