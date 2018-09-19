@@ -14,5 +14,7 @@ install:
 # command to run tests
   
 script:
-  - mocha --exit
+  - npm test
 
+after_success:
+  - npm run coverage
