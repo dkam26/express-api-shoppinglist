@@ -14,7 +14,7 @@ install:
 # command to run tests
 
 before_script:
-  - mongo 'use test_db'
+  - mongo test_db
 script:
   - mocha --exit
 after_script: 
