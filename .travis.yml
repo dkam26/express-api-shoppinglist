@@ -11,7 +11,7 @@ install:
   - npm install
 # command to run tests
 script:
-  - mocha
+  - mocha --reporter mocha-coveralls-reporter
 after_script: 
 # "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   - npm run coverage

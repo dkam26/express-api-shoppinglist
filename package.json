@@ -22,6 +22,7 @@
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.3.0",
     "mocha": "^5.2.0",
+    "mocha-coveralls-reporter": "0.0.5",
     "mongoose": "^4.4.20",
     "mongoose-type-email": "^1.0.9",
     "morgan": "^1.7.0",
