@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha --exit",
-    "cover": "istanbul cover _mocha"
+    "cover": "istanbul cover _mocha --exit",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "keywords": [],
   "author": "",
