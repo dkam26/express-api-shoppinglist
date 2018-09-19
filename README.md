@@ -1,5 +1,7 @@
 https://travis-ci.org/dkam26/express-api-shoppinglist.svg?branch=develop
 
+[![Coverage Status](https://coveralls.io/repos/github/dkam26/express-api-shoppinglist/badge.svg?branch=develop)](https://coveralls.io/github/dkam26/express-api-shoppinglist?branch=develop)
+
 # ShoppingList
 Shoppinglist is an app helps users keep track of their purchased goods.Users can add shoppiglists ,update them or even delete them.
 
