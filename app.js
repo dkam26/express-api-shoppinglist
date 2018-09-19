@@ -52,8 +52,8 @@ app.use(function(err, req, res, next){
 
 var port  = process.env.PORT || 3000;
 
-app.listen(port, function(){
+ var server =app.listen(port, function(){
     console.log("Express running ",port)
 })
 
-module.exports.app = app;
+module.exports.app = server;

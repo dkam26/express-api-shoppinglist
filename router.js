@@ -92,7 +92,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                 Shoppinglists.where({'name':req.body.name, 'owner':user[0]._id}).update({
                     $set: {name:req.body.newName}
                 }).exec();
-                return res.status(201).send(` list updated `)
+                return res.status(201).send({message:` list updated `})
           });
 
         })
@@ -108,7 +108,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                 });
                 Users.find({"_id":decoded.id}, (err, user) =>{
                     Shoppinglists.find({'name':req.body.name, 'owner':user[0]._id}).remove().exec();
-                    return res.status(201).send(` list deleted `)
+                    return res.status(201).send({mesaage:` list deleted `})
               });
             })
 

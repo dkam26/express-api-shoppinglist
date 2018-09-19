@@ -4,6 +4,7 @@ const chaiHttp = require('chai-http');
 var mongoose = require("mongoose");
 const  expect = chai.expect;
 
+
 const app = require('../app').app;
 const Users =  require('../models').User
 const Shoppinglists =   require('../models').Shoppinglist
@@ -79,6 +80,37 @@ describe('Shoppinglistapp', () => {
                 })
                
           })
+          it('it should PUT lists', (done) =>{
+            chai.request(app)
+                .put('/shoppinglists/auth/update/')
+                .set('x-access-token',token)
+                .send({'name':'shirt','newName':'tousers'})
+                .end((err, res ) => {
+                    expect(res.status).to.equal(201);
+                    expect(res.body).to.be.an('object');
+                    done();
+                })
+               
+          })
+          it('it should DELETE lists', (done) =>{
+            chai.request(app)
+                .del('/shoppinglists/auth/delete')
+                .set('x-access-token',token)
+                .send({'name':'shirt'})
+                .end((err, res ) => {
+                    expect(res.status).to.equal(201);
+                    expect(res.body).to.be.an('object');
+                    done();
+                })
+               
+          })
     });
- 
+    after((done) =>{
+        app.close(function () {
+            console.log( "Closed out remaining connections.");
+            // Close db connections, etc.
+          });
+         done();	
+   
+    })
   });
