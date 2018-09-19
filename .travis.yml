@@ -14,7 +14,6 @@ install:
 # command to run tests
   
 script:
-  - mongo test_db
   - mocha --exit
 after_script: 
 # "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
