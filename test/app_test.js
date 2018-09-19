@@ -105,12 +105,11 @@ describe('Shoppinglistapp', () => {
                
           })
     });
-    after((done) =>{
+    after(async() =>{
         app.close(function () {
             console.log( "Closed out remaining connections.");
             // Close db connections, etc.
-          });
-         done();	
+          });	
    
     })
   });
