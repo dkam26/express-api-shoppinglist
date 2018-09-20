@@ -149,7 +149,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                                 if(list.length > 0){
                                     console.log(list)
                                     Shoppinglists.find({'name':req.body.name, 'owner':user[0]._id}).remove().exec();
-                                    return res.status(201).send({mesaage:` list deleted `})
+                                    return res.status(201).send({Message:` list deleted `})
                                     
                                     }else{
                                         return res.json({'Message': 'List doesnt exist'})

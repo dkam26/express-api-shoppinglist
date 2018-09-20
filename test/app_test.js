@@ -118,7 +118,7 @@ describe('Shoppinglistapp', () => {
                 })               
         })
 
-        it('it should POST list', (done) =>{
+        it('it should validate POST list', (done) =>{
             chai.request(app)
                 .post('/shoppinglists/auth/addlist/')
                 .set('x-access-token',token)
@@ -166,8 +166,35 @@ describe('Shoppinglistapp', () => {
                     expect(res.body).to.be.an('object');
                     done();
                 })
-               
-        })
+           })
+
+           it('it should DELETE lists', (done) =>{
+            chai.request(app)
+                .del('/shoppinglists/auth/delete')
+                .set('x-access-token',token)
+                .send({'name':''})
+                .end((err, res ) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.own.property('Message', 'Missing fields!' );
+                    done();
+                })
+           })
+
+           it('it should DELETE lists', (done) =>{
+            chai.request(app)
+                .del('/shoppinglists/auth/delete')
+                .set('x-access-token',token)
+                .send({'name':'s'})
+                .end((err, res ) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.own.property('Message', 'List doesnt exist' );
+                    done();
+                })
+           })
+
+        
     });
     after(async() =>{
         app.close(function () {
