@@ -98,7 +98,7 @@ describe('Shoppinglistapp', () => {
                 .set('x-access-token',token)
                 .send({'name':'shirt'})
                 .end((err, res ) => {
-                    expect(res.status).to.equal(201);
+                    expect(res.status).to.equal(200);
                     expect(res.body).to.be.an('object');
                     done();
                 })
