@@ -38,7 +38,7 @@ const Shoppinglists =   require('./models').Shoppinglist
         if(username && password){
                     Users.find({"username":req.body.username,"password":req.body.password}, (err, users) =>{
                         if(users.length === 0){
-                            return res.json({message:'Wrong credentials'})
+                            return res.json({Message:'Wrong credentials'})
                         }else{
                             var token = jwt.sign({id:users[0]._id},'super', {
                                 expiresIn: 86400
@@ -48,7 +48,7 @@ const Shoppinglists =   require('./models').Shoppinglist
                         
                     })
         }else{
-            return res.json({message: 'Missing fields!'});
+            return res.json({Message: 'Missing fields!'});
         }
     })
       // all lists endpoints

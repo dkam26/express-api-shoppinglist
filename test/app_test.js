@@ -39,6 +39,27 @@ describe('Shoppinglistapp', () => {
               });
 
         });
+
+        it('it should validate POST  signup', (done) => {
+            var invalidUserInfo={
+                username: 'ii',
+                firstname: '',
+                secondname: 'Kamara',
+                password:'1234'
+              } 
+            chai.request(app)
+                .post('/shoppinglists/signup')
+                .send(invalidUserInfo)
+                .end((err, res) => {
+                      expect(res.status).to.equal(200);
+                      expect(res.body).to.be.an('object');
+                      expect(res.body).to.have.own.property('message', 'Missing fields!' )
+                  done();
+                });
+  
+          });
+
+        
       
     });
     describe('/POST login', () => {
@@ -56,6 +77,34 @@ describe('Shoppinglistapp', () => {
               
 
         });
+        it('it should validate POST  login', (done) => {
+            chai.request(app)
+                .post('/shoppinglists/login')
+                .send({"username":user.username,"password":'123'})
+                .end((err, res) =>{
+                  expect(res.status).to.equal(200);
+                  expect(res.body).to.have.own.property('Message', 'Wrong credentials' )
+                  
+                  
+                  done();
+                })
+                
+  
+        });
+
+        it('it should validate POST  login', (done) => {
+            chai.request(app)
+                .post('/shoppinglists/login')
+                .send({"username":user.username,"password":''})
+                .end((err, res) =>{
+                  expect(res.status).to.equal(200);
+                  expect(res.body).to.have.own.property('Message', 'Missing fields!' )
+                  done();
+                })
+                
+  
+        });
+
         it('it should POST list', (done) =>{
             var list = 'shirt';
             chai.request(app)
@@ -66,10 +115,23 @@ describe('Shoppinglistapp', () => {
                     expect(res.status).to.equal(201);
                     expect(res.body).to.be.an('object');
                     done();
-                })
-               
-          })
-          it('it should GET lists', (done) =>{
+                })               
+        })
+
+        it('it should POST list', (done) =>{
+            chai.request(app)
+                .post('/shoppinglists/auth/addlist/')
+                .set('x-access-token',token)
+                .send({'name':''})
+                .end((err, res ) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.own.property('Message', 'Missing fields!' )
+                    done();
+                })   
+        })
+
+        it('it should GET lists', (done) =>{
             chai.request(app)
                 .get('/shoppinglists/auth/lists/')
                 .set('x-access-token',token)
@@ -80,6 +142,7 @@ describe('Shoppinglistapp', () => {
                 })
                
           })
+
           it('it should PUT lists', (done) =>{
             chai.request(app)
                 .put('/shoppinglists/auth/update/')
@@ -92,6 +155,7 @@ describe('Shoppinglistapp', () => {
                 })
                
           })
+
           it('it should DELETE lists', (done) =>{
             chai.request(app)
                 .del('/shoppinglists/auth/delete')
@@ -103,7 +167,7 @@ describe('Shoppinglistapp', () => {
                     done();
                 })
                
-          })
+        })
     });
     after(async() =>{
         app.close(function () {
