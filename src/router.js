@@ -1,18 +1,16 @@
-'use strict';
+import express from 'express';
 
-const express = require('express');
-
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const router = new express.Router();
-const Users = require('./user.models').User;
-const Shoppinglists = require('./shoppinglist.models').Shoppinglist;
+import User from './user.models';
+import Shoppinglist from './shoppinglist.models';
 
 
 router
 // Signup endpoint
     .post('/signup', (req, res) =>{
-      Users.find({'username': req.body.username}, (err, users) =>{
+      User.find({'username': req.body.username}, (err, users) =>{
         const {username, firstname, secondname, password} = req.body;
         if (username && firstname && secondname && password) {
           if (users.length > 0) {
@@ -20,7 +18,7 @@ router
               message: `User already exists, ${req.body.username }`,
             });
           } else {
-            const user = new Users(req.body);
+            const user = new User(req.body);
             user.save();
             return res.json({
               message: `User successfully added!, ${req.body.username }`});
@@ -34,13 +32,13 @@ router
     .post('/login', (req, res)=>{
       const {username, password} = req.body;
       if (username && password) {
-        Users.find({
+        User.findOne({
           'username': req.body.username,
           'password': req.body.password}, (err, users) =>{
-          if (users.length === 0) {
+          if (users === null) {
             return res.json({Message: 'Wrong credentials'});
           } else {
-            const token = jwt.sign({id: users[0]._id}, 'super', {
+            const token = jwt.sign({id: users._id}, 'super', {
               expiresIn: 86400,
             });
             return res.json({'user': req.body.username, 'token': token});
@@ -64,8 +62,8 @@ router
             message: 'Failed to authenticate token.',
           });
         }
-        Users.find({'_id': decoded.id}, (err, user) =>{
-          Shoppinglists.find({'owner': user[0]._id}, (err, list) =>{
+        User.find({'_id': decoded.id}, (err, user) =>{
+          Shoppinglist.find({'owner': user[0]._id}, (err, list) =>{
             if (list.length === 0) {
               return res.json({'Message': 'No lists'});
             } else {
@@ -92,17 +90,18 @@ router
           });
         }
         if (name) {
-          Users.find({'_id': decoded.id}, (err, user) =>{
-            Shoppinglists.find({
-              'owner': user[0]._id,
+          User.findOne({'_id': decoded.id}, (err, user) =>{
+            console.log(user._id);
+            Shoppinglist.find({
+              'owner': user._id,
               'name': name}, (err, list) =>{
               if (list.length > 0) {
                 return res.status(201).json({
                   'Message': `List exists!, ${req.body.name }`} );
               } else {
-                const addlist = new Shoppinglists({
+                const addlist = new Shoppinglist({
                   'name': name,
-                  'owner': user[0]._id});
+                  'owner': user._id});
                 addlist.save();
                 return res.status(201).json({
                   'Message': `List successfully added!, ${req.body.name }`});
@@ -131,14 +130,14 @@ router
           });
         }
         if (name && newName) {
-          Users.find({'_id': decoded.id}, (err, user) =>{
-            Shoppinglists.find({
-              'owner': user[0]._id,
+          User.findOne({'_id': decoded.id}, (err, user) =>{
+            Shoppinglist.find({
+              'owner': user._id,
               'name': name}, (err, list) =>{
               if (list.length > 0) {
-                Shoppinglists.where({
+                Shoppinglist.where({
                   'name': name,
-                  'owner': user[0]._id}).update({
+                  'owner': user._id}).update({
                   $set: {name: newName},
                 }).exec();
                 return res.status(201).send({message: ` list updated `});
@@ -169,14 +168,14 @@ router
           });
         }
         if (name) {
-          Users.find({'_id': decoded.id}, (err, user) =>{
-            Shoppinglists.find({
-              'owner': user[0]._id,
+          User.findOne({'_id': decoded.id}, (err, user) =>{
+            Shoppinglist.find({
+              'owner': user._id,
               'name': name}, (err, list) =>{
               if (list.length > 0) {
-                Shoppinglists.find({
+                Shoppinglist.find({
                   'name': req.body.name,
-                  'owner': user[0]._id}).remove().exec();
+                  'owner': user._id}).remove().exec();
                 return res.status(201).send({Message: ` list deleted `});
               } else {
                 return res.json({'Message': 'List doesnt exist'});
@@ -188,4 +187,4 @@ router
         }
       });
     });
-module.exports = router;
+export default router;

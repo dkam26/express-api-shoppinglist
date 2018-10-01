@@ -1,9 +1,7 @@
-'use strict';
-
-const express = require('express');
+import express from 'express';
 const app = express();
-const routes = require('./src/router');
-const config = require('config');
+import router from './src/router';
+import config from 'config';
 
 
 const jsonParser = require('body-parser').json;
@@ -29,7 +27,7 @@ if (config.util.getEnv('NODE_ENV') !== 'test') {
 // 'combined' outputs the Apache style LOGs
 }
 
-app.use('/shoppinglists', routes);
+app.use('/shoppinglists', router);
 
 // 404 error handler
 app.use((req, res, next) =>{
@@ -51,8 +49,8 @@ app.use((err, req, res, next)=>{
 
 const port = process.env.PORT || 3000;
 
-const server =app.listen(port, () =>{
+const Server = app.listen(port, () =>{
   console.log('Express running ', port);
 });
 
-module.exports.app = server;
+export default Server;

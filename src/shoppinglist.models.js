@@ -1,6 +1,4 @@
-'use strict';
-
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 
@@ -12,4 +10,5 @@ const shoppinglistSchema = new Schema({
 
 const Shoppinglist = mongoose.model('Shoppinglist', shoppinglistSchema);
 
-module.exports.Shoppinglist = Shoppinglist;
+
+export default Shoppinglist;

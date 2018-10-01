@@ -3,10 +3,9 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 
-
-const app = require('../app').app;
-const Users = require('../src/user.models').User;
-const Shoppinglists = require('../src/shoppinglist.models').Shoppinglist;
+import Server from '../app';
+import User from '../src/user.models';
+import Shoppinglist from '../src/shoppinglist.models';
 const user ={
   username: 'ii',
   firstname: 'deo',
@@ -17,15 +16,15 @@ chai.use(chaiHttp);
 
 describe('Shoppinglistapp', () => {
   before((done) =>{
-    Users.remove({}, (err) => {
-      Shoppinglists.remove({}, (err) =>{
+    User.remove({}, (err) => {
+      Shoppinglist.remove({}, (err) =>{
         done();
       });
     });
   });
   describe('/POST signup and /POST login', () => {
     it('it should POST  signup', (done) => {
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/signup')
           .send(user)
           .end((err, res) => {
@@ -43,7 +42,7 @@ describe('Shoppinglistapp', () => {
         secondname: 'Kamara',
         password: '1234',
       };
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/signup')
           .send(invalidUserInfo)
           .end((err, res) => {
@@ -58,7 +57,7 @@ describe('Shoppinglistapp', () => {
   describe('/POST login', () => {
     let token ='';
     it('it should POST  login', (done) => {
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/login')
           .send({'username': user.username, 'password': user.password})
           .end((err, res) =>{
@@ -69,7 +68,7 @@ describe('Shoppinglistapp', () => {
           });
     });
     it('it should validate POST  login', (done) => {
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/login')
           .send({'username': user.username, 'password': '123'})
           .end((err, res) =>{
@@ -81,7 +80,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should validate POST  login', (done) => {
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/login')
           .send({'username': user.username, 'password': ''})
           .end((err, res) =>{
@@ -94,7 +93,7 @@ describe('Shoppinglistapp', () => {
 
     it('it should POST list', (done) =>{
       let list = 'shirt';
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/auth/addlist/')
           .set('x-access-token', token)
           .send({'name': list})
@@ -106,7 +105,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should validate POST list', (done) =>{
-      chai.request(app)
+      chai.request(Server)
           .post('/shoppinglists/auth/addlist/')
           .set('x-access-token', token)
           .send({'name': ''})
@@ -120,7 +119,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should GET lists', (done) =>{
-      chai.request(app)
+      chai.request(Server)
           .get('/shoppinglists/auth/lists/')
           .set('x-access-token', token)
           .end((err, res ) => {
@@ -131,7 +130,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should PUT lists', (done) =>{
-      chai.request(app)
+      chai.request(Server)
           .put('/shoppinglists/auth/update/')
           .set('x-access-token', token)
           .send({'name': 'shirt', 'newName': 'tousers'})
@@ -143,7 +142,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should DELETE lists', (done) =>{
-      chai.request(app)
+      chai.request(Server)
           .del('/shoppinglists/auth/delete')
           .set('x-access-token', token)
           .send({'name': 'shirt'})
@@ -155,7 +154,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should DELETE lists', (done) =>{
-      chai.request(app)
+      chai.request(Server)
           .del('/shoppinglists/auth/delete')
           .set('x-access-token', token)
           .send({'name': ''})
@@ -169,7 +168,7 @@ describe('Shoppinglistapp', () => {
     });
 
     it('it should DELETE lists', (done) =>{
-      chai.request(app)
+      chai.request(Server)
           .del('/shoppinglists/auth/delete')
           .set('x-access-token', token)
           .send({'name': 's'})
@@ -183,7 +182,7 @@ describe('Shoppinglistapp', () => {
     });
   });
   after(() => {
-    app.close( () => {
+    Server.close( () => {
       console.log( 'Closed out remaining connections.');
     //  Close db connections, etc.
     });
