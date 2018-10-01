@@ -5,8 +5,8 @@ const expect = chai.expect;
 
 
 const app = require('../app').app;
-const Users = require('../src/models').User;
-const Shoppinglists = require('../src/models').Shoppinglist;
+const Users = require('../src/user.models').User;
+const Shoppinglists = require('../src/shoppinglist.models').Shoppinglist;
 const user ={
   username: 'ii',
   firstname: 'deo',

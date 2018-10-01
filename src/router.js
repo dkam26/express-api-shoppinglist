@@ -5,8 +5,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const router = new express.Router();
-const Users = require('./models').User;
-const Shoppinglists = require('./models').Shoppinglist;
+const Users = require('./user.models').User;
+const Shoppinglists = require('./shoppinglist.models').Shoppinglist;
 
 
 router
